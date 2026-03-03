@@ -31,6 +31,25 @@ ffplay rtsp://pi.local:8554/cam -fflags nobuffer -flags low_delay -framedrop
 vlc rtsp://pi.local:8554/cam
 ```
 
+**Windows PC (VLC):**
+- Download [VLC](https://www.videolan.org/vlc/)
+- **Media → Open Network Stream** → `rtsp://192.168.178.68:8554/cam`
+- For lower latency: **Tools → Preferences → Show All → Input/Codecs → Network caching** → set to `300` ms
+
+## Measuring Latency
+
+**Visual clock method:**
+1. Display a stopwatch/clock with milliseconds on a screen or phone
+2. Point the camera at it
+3. Open the stream on another device
+4. Take a photo showing both the real clock and the streamed clock
+5. The time difference is your end-to-end latency
+
+**FFplay with timing info:**
+```bash
+ffplay -loglevel debug rtsp://192.168.178.68:8554/cam -fflags nobuffer -flags low_delay -framedrop 2>&1 | grep -i "delay\|first frame"
+```
+
 ## Stream Settings
 
 | Setting       | Value               |
