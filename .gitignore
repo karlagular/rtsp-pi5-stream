@@ -1,0 +1,6 @@
+# MediaMTX binary
+mediamtx
+
+# System files
+*.log
+.DS_Store
