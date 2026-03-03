@@ -25,6 +25,10 @@ rtsp://192.168.178.68:8554/cam
 ```bash
 ffplay rtsp://pi.local:8554/cam -fflags nobuffer -flags low_delay -framedrop
 ```
+for Jetson to avoid transport mismatch force TCP transport:
+```bash
+ffplay -rtsp_transport tcp -fflags nobuffer -flags low_delay -framedrop rtsp://192.168.178.68:8554/cam
+```
 
 **VLC:**
 ```bash
