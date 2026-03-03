@@ -40,6 +40,69 @@ vlc rtsp://pi.local:8554/cam
 - **Media → Open Network Stream** → `rtsp://192.168.178.68:8554/cam`
 - For lower latency: **Tools → Preferences → Show All → Input/Codecs → Network caching** → set to `300` ms
 
+## Ethernet Static IP Setup
+
+Using a direct Ethernet cable between the Raspberry Pi 5 and the Jetson Nano (or any other client) gives lower latency and higher reliability than WiFi. When connecting directly without a router or switch there is no DHCP server, so both devices need a static IP address.
+
+### Static IP on Raspberry Pi 5 (Raspberry Pi OS)
+
+Edit `/etc/dhcpcd.conf`:
+
+```bash
+sudo nano /etc/dhcpcd.conf
+```
+
+Add the following lines at the end of the file (replace `eth0` with your interface name if different):
+
+```
+interface eth0
+static ip_address=10.0.0.1/24
+```
+
+Then reboot or restart the interface:
+
+```bash
+sudo systemctl restart dhcpcd
+```
+
+Alternatively, set the static IP through the desktop GUI: **Preferences → Network → eth0 → Edit → IPv4 → Manual** and enter `10.0.0.1` / `255.255.255.0`.
+
+### Static IP on Jetson Nano (Ubuntu / JetPack)
+
+**GUI method:** Open **System Settings → Network → Wired → Edit → IPv4 Settings**, set Method to **Manual**, and add:
+
+| Address   | Netmask       | Gateway |
+|-----------|---------------|---------|
+| 10.0.0.2  | 255.255.255.0 | (empty) |
+
+**Netplan method:** Edit or create `/etc/netplan/01-static.yaml`:
+
+```yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      addresses:
+        - 10.0.0.2/24
+```
+
+Apply the configuration:
+
+```bash
+sudo netplan apply
+```
+
+### Streaming over the Direct Ethernet Link
+
+Once both devices have static IPs, use the Pi's address in the stream URL:
+
+```bash
+ffplay -rtsp_transport tcp rtsp://10.0.0.1:8554/cam -fflags nobuffer -flags low_delay -framedrop
+```
+
+> **Tip:** A direct cable connection (no router) requires static IPs because there is no DHCP server to assign addresses automatically.
+
 ## Measuring Latency
 
 **Visual clock method:**
