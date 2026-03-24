@@ -12,7 +12,7 @@ bash setup.sh
 sudo bash install_service.sh
 ```
 
-The stream will be available at:
+The stream will be available (at home 2.5 Network) at:
 
 ```
 rtsp://pi.local:8554/cam
