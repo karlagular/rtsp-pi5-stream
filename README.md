@@ -19,6 +19,12 @@ rtsp://pi.local:8554/cam
 rtsp://192.168.178.68:8554/cam
 ```
 
+> **Connected to a new WiFi?** Run this on the Raspberry Pi to find its current IP address:
+> ```bash
+> hostname -I | awk '{print $1}'
+> ```
+> Then replace the IP in the stream URL, e.g. `rtsp://<IP>:8554/cam`.
+
 ## Playback
 
 **FFplay (lowest latency):**
